@@ -45,7 +45,7 @@ class halfDoseApprox():
 		# run the following
 		success = self.checkInputs()
 		if success is False:
-			print 'Invalid inputs supplied'
+			print('Invalid inputs supplied')
 			return
 
 		self.printAtomSummary()
@@ -90,7 +90,7 @@ class halfDoseApprox():
 				popt, pcov = curve_fit(self.decayFunc, xData, yData,initGuess)
 				popt = list(popt) + [self.zeroOffset]
 		except RuntimeError:
-			print 'Max interations reached without convergence...'
+			print('Max interations reached without convergence...')
 			self.halfDose 			= 'NaN'
 			self.halfDoseCertainty 	= 10**4 # big number --> no certainty 
 			self.halfDoseStd 		= 'NaN'
@@ -161,25 +161,25 @@ class halfDoseApprox():
 			f.savefig('{}-D{}.png'.format(identifier,self.densMet))
 
 	def printCalcSummary(self):
-		print '----------------------------'
-		print 'Half dose calculation summary:'
-		print 'Best a: {}, k: {}, c: {}'.format(*self.fitParams)
+		print('----------------------------')
+		print('Half dose calculation summary:')
+		print('Best a: {}, k: {}, c: {}'.format(*self.fitParams))
 		if self.zeroOffset == 'y':
-			print 'val/Std error: {}, {}, {}'.format(*(self.fitParams/self.fitErrors))
+			print('val/Std error: {}, {}, {}'.format(*(self.fitParams/self.fitErrors)))
 		else:
-			print 'val/Std error: {}, {}'.format(*(self.fitParams[:-1]/self.fitErrors))
-		print 'Residuals: {}'.format(self.fitResiduals)
-		print "Half life predicted to be {}".format(self.halfDose)
-		print "initial decay rate: {}".format(self.initDecayRate)
-		print "Certainty value: {}".format(self.certaintyValue)
-		print "Half dose Std interval: {}-{}".format(*self.halfDoseStd)
+			print('val/Std error: {}, {}'.format(*(self.fitParams[:-1]/self.fitErrors)))
+		print('Residuals: {}'.format(self.fitResiduals))
+		print("Half life predicted to be {}".format(self.halfDose))
+		print("initial decay rate: {}".format(self.initDecayRate))
+		print("Certainty value: {}".format(self.certaintyValue))
+		print("Half dose Std interval: {}-{}".format(*self.halfDoseStd))
 
 	def printAtomSummary(self):
 		residue 	= self.atom.basetype + str(self.atom.residuenum)
 		atomtype 	= self.atom.atomtype
 		chain 		= self.atom.chaintype
-		print '----------------------------'
-		print 'chain:{} residue:{} atom:{}'.format(chain,residue,atomtype)
+		print('----------------------------')
+		print('chain:{} residue:{} atom:{}'.format(chain,residue,atomtype))
 
 	def calculateHalfDose(self,fitConstants,shift):
 		# if shift is False then half dose is dose for density to reach half of initial density
