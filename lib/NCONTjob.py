@@ -53,8 +53,8 @@ class NCONTjob():
         if self.printText is False:
             return
 
-        print '--------------------------'
-        print 'NCONT Summary:'
-        print 'Input pdb file: {}'.format(self.inputPDBfile)
-        print 'Output log file: {}'.format(self.outputLogfile)
-        print '--------------------------'
+        print('--------------------------')
+        print('NCONT Summary:')
+        print('Input pdb file: {}'.format(self.inputPDBfile))
+        print('Output log file: {}'.format(self.outputLogfile))
+        print('--------------------------')
