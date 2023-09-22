@@ -9,17 +9,17 @@ if c.checkSeaborn():
 
 class halfDoseApprox():
 	def __init__(self,
-				 atom            = [],
-				 atoms           = [],
-				 plot            = True,
-				 doses           = [],
-				 globalScaling   = False,
-				 doseFraction    = 0.5,
-				 densityMetric   = 'loss',
-				 normType        = 'Standard',
-				 plotDir         = './',
-				 shiftedHalfDose = True,
-				 zeroOffset      = False):
+				atom            = [],
+				atoms           = [],
+				plot            = True,
+				doses           = [],
+				globalScaling   = False,
+				doseFraction    = 0.5,
+				densityMetric   = 'loss',
+				normType        = 'Standard',
+				plotDir         = './',
+				shiftedHalfDose = True,
+				zeroOffset      = False):
 		
 		self.atom 				= atom # the current atom object 
 		self.atoms 				= atoms # the full list of atom objects
@@ -71,7 +71,8 @@ class halfDoseApprox():
 		xData = np.array(self.doses)
 
 		yData = np.array(self.atom.densMetric[self.densMet][self.normType]['values'])
-		if self.globalScaling is True: yData /= self.avDmetric
+		if self.globalScaling is True:
+			yData /= self.avDmetric
 
 		# initial parameter guesses
 		a = yData[0]
@@ -79,7 +80,8 @@ class halfDoseApprox():
 		c = 0
 
 		initGuess = [a,k]
-		if self.zeroOffset == 'y': initGuess += [c] # extra offset param if required
+		if self.zeroOffset == 'y':
+			initGuess += [c] # extra offset param if required
 
 
 		# run fitting dependent on whether decay function zero-offset permitted
@@ -114,28 +116,32 @@ class halfDoseApprox():
 		else:
 			self.certaintyValue = np.product(self.fitParams[:-1]/self.fitErrors)
 
-		if self.plot == True:
+		if self.plot:
 			self.plotDecayPlot(xData,yData)
 		return True
 
 	def saveAtomHalfDose(self):
 		# for current atom object save the half dose statistics as attributes
-		self.atom.densMetric[self.densMet][self.normType]['Half-dose'] = {'Half-dose'       : self.halfDose,
-																	   	  'Residuals'       : self.fitResiduals,
-																	      'Certainty'       : self.certaintyValue,
-																	      'Initial density' : self.fitParams[0],
-																	      'End density'     : self.fitParams[2],
-																	      'init decay rate' : self.initDecayRate}
+		self.atom.densMetric[self.densMet][self.normType]['Half-dose'] = {
+			'Half-dose'       : self.halfDose,
+			'Residuals'       : self.fitResiduals,
+			'Certainty'       : self.certaintyValue,
+			'Initial density' : self.fitParams[0],
+			'End density'     : self.fitParams[2],
+			'init decay rate' : self.initDecayRate
+		}
 
 	def plotDecayPlot(self,xData,yData):
 		sns_set(context = 'talk',
 				style   = 'dark')
 		f = plt.figure()
-		plt.plot(xData,
-			 	 yData,
-			 	 marker     = '.',
-			 	 linestyle  = '',
-			 	 markersize = 14)	
+		plt.plot(
+			xData,
+			yData,
+			marker     = '.',
+			linestyle  = '',
+			markersize = 14
+		)
 
 		x = np.linspace(min(xData),max(xData),100)
 		plt.plot(x,self.decayFuncOffset(x,*self.fitParams))
@@ -154,7 +160,7 @@ class halfDoseApprox():
 		identifier = self.atom.getAtomID() 
 		sns_despine()
 		f.suptitle('{} {} D{} Half-dose: {} MGy, initial decay: {}'.format(self.atom.getAtomID(),self.normType,
-																		   self.densMet,self.halfDose,self.initDecayRate))
+																		self.densMet,self.halfDose,self.initDecayRate))
 		if self.plotDir != '':
 			f.savefig('{}/{}-D{}.png'.format(self.plotDir,identifier,self.densMet))
 		else:
@@ -187,7 +193,7 @@ class halfDoseApprox():
 			return -np.log((self.doseFraction)*(1 - (fitConstants[2]/fitConstants[0])))/(fitConstants[1])
 		# if shift is True then half dose is dose for density to reach av(initial density,end density limit)
 		else:
-			 return -np.log(self.doseFraction)/fitConstants[1]
+			return -np.log(self.doseFraction)/fitConstants[1]
 
 	def calculateInitDecayRate(self,fitConstants):
 		# calculate the initial decay rate for the current exponential decay model
